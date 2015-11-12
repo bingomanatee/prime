@@ -4,7 +4,7 @@ this program outputs a multiplication table where the row and column factors are
 
 ![Screenshot](primes_sreenshot.png)
 
-## environment
+## Environment
 
 Node.js must be installed for this program to run; tested under version 4.2.
 

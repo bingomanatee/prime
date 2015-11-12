@@ -5,11 +5,21 @@ var CLI = require('clui'),
     clc = require('cli-color');
 
 module.exports = (COUNT) => {
-
+    require('clear')();
     const list = new PrimeList(COUNT);
 
     const COL_CHARACTERS = (list.lastPrime * list.lastPrime);
     const COLUMN_SIZE = Math.max(5, COL_CHARACTERS.toString().length + 1);
+
+    var padding = '';
+    while(padding.length < COLUMN_SIZE) padding += ' ';
+
+    const pad = (n) => {
+        if (!(typeof n === 'string')) {
+            n = n.toString();
+        }
+        return `${padding}${n}`.substr(-COLUMN_SIZE );
+    };
 
     var Line = CLI.Line,
         LineBuffer = CLI.LineBuffer;
@@ -22,15 +32,15 @@ module.exports = (COUNT) => {
     });
 
     var message = new Line(outputBuffer)
-        .column('Primes', COLUMN_SIZE * COUNT, [clc.green])
+        .column('Primes', COLUMN_SIZE * COUNT + 1, [clc.green])
         .fill()
         .store();
 
     var header = new Line(outputBuffer)
-        .column(' \\ ', COLUMN_SIZE, [clc.cyan]);
+        .column(' \\ ', COLUMN_SIZE + 1, [clc.cyan]);
 
     for (let colIndex in list.numbers) {
-        header.column((list.numbers[colIndex]).toString(), COLUMN_SIZE, [clc.cyan]);
+        header.column(pad((list.numbers[colIndex])), COLUMN_SIZE, [clc.cyan]);
     }
     header.fill()
         .store();
@@ -41,10 +51,10 @@ module.exports = (COUNT) => {
         var oddCol = true;
         var rowValue = list.numbers[rowIndex];
         line = new Line(outputBuffer);
-        line.column(rowValue.toString(), COLUMN_SIZE, [clc.cyan]);
+        line.column(pad(rowValue), COLUMN_SIZE + 1, [clc.cyan]);
 
         for (let colIndex in list.numbers) {
-            line.column((rowValue * list.numbers[colIndex]).toString(), COLUMN_SIZE, (odd) ? [clc.yellow] : (oddCol) ? [clc.red] : null);
+            line.column(pad(rowValue * list.numbers[colIndex]), COLUMN_SIZE, (odd) ? [clc.yellow] : (oddCol) ? [clc.red] : null);
             oddCol = !oddCol;
         }
         line.fill()
